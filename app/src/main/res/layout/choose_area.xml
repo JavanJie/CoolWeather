@@ -25,10 +25,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:textSize="30sp"
-            android:background="@color/clear"
-            android:textColor="@color/white"
-            android:text="←"/>
+            android:background="@drawable/ic_back" />
 
     </RelativeLayout>
 

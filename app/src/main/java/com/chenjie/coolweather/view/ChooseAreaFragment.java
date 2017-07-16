@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chenjie.coolweather.MainActivity;
 import com.chenjie.coolweather.R;
 import com.chenjie.coolweather.WeatherActivity;
 import com.chenjie.coolweather.dao.City;
@@ -94,10 +95,20 @@ public class ChooseAreaFragment extends Fragment {
                 } else if (currentLevel == LEVEL_COUNTRY) {
                     selectedCountry = countryList.get(i);
                     String weatherID = selectedCountry.getWeatherID();
-                    Intent intent = new Intent(getActivity(), WeatherActivity.class);
-                    intent.putExtra("weather_id", weatherID);
-                    startActivity(intent);
-                    getActivity().finish();
+
+                    if (getActivity() instanceof MainActivity) {
+                        Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                        intent.putExtra("weather_id", weatherID);
+                        startActivity(intent);
+                        getActivity().finish();
+                    } else if (getActivity() instanceof WeatherActivity) {
+                        WeatherActivity activity = (WeatherActivity) getActivity();
+                        activity.getDrawerLayout().closeDrawers();
+                        activity.getSwipeRefreshLayout().setRefreshing(true);
+                        activity.requestWeather(weatherID);
+                    }
+
+
                 }
             }
         });

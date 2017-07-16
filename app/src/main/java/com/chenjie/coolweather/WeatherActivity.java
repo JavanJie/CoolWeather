@@ -5,10 +5,14 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -45,6 +49,10 @@ public class WeatherActivity extends AppCompatActivity {
 
     private ImageView backgroundImage;
 
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private DrawerLayout drawerLayout;
+    private Button navButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,14 +81,23 @@ public class WeatherActivity extends AppCompatActivity {
 
         backgroundImage = (ImageView) findViewById(R.id.weather_background_image);
 
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navButton = (Button) findViewById(R.id.nav_button);
+
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         String weatherString = pref.getString("weather", null);
         String bingPic = pref.getString("bing_pic", null);
+
+        final String weatherID;
         if (weatherString != null) {
             Weather weather = JSONUtil.handleWeatherResponse(weatherString);
+            weatherID = weather.getBasic().getWeatherID();
             showWeatherInfo(weather);
         } else {
-            String weatherID = getIntent().getStringExtra("weather_id");
+            weatherID = getIntent().getStringExtra("weather_id");
             weatherLayout.setVisibility(View.INVISIBLE);
             requestWeather(weatherID);
         }
@@ -90,6 +107,19 @@ public class WeatherActivity extends AppCompatActivity {
             loadBingPic();
         }
 
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                requestWeather(weatherID);
+            }
+        });
+
+        navButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
     }
 
     private void showWeatherInfo(Weather weather) {
@@ -136,7 +166,7 @@ public class WeatherActivity extends AppCompatActivity {
         weatherLayout.setVisibility(View.VISIBLE);
     }
 
-    private void requestWeather(String weatherID) {
+    public void requestWeather(String weatherID) {
         String weatherRequestURL = "http://guolin.tech/api/weather?cityid=" + weatherID + "&key=bc0418b57b2d4918819d3974ac1285d9";
         Log.d(TAG, weatherRequestURL);
         NetworkUtil.sendHttpRequest(weatherRequestURL, new Callback() {
@@ -147,6 +177,7 @@ public class WeatherActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         Toast.makeText(WeatherActivity.this, R.string.load_weather_from_server_failed, Toast.LENGTH_SHORT).show();
+                        swipeRefreshLayout.setRefreshing(false);
                     }
                 });
             }
@@ -166,6 +197,7 @@ public class WeatherActivity extends AppCompatActivity {
                         } else {
                             Toast.makeText(WeatherActivity.this, R.string.load_weather_from_server_failed, Toast.LENGTH_SHORT).show();
                         }
+                        swipeRefreshLayout.setRefreshing(false);
                     }
                 });
             }
@@ -196,4 +228,14 @@ public class WeatherActivity extends AppCompatActivity {
             }
         });
     }
+
+    public DrawerLayout getDrawerLayout() {
+        return drawerLayout;
+    }
+
+    public SwipeRefreshLayout getSwipeRefreshLayout() {
+        return swipeRefreshLayout;
+    }
+
+
 }
