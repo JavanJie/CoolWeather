@@ -3,4 +3,11 @@
     <string name="load_provinces_from_server_failed">Load provinces from server failed!</string>
     <string name="load_cities_from_server_failed">Load cities from server failed!</string>
     <string name="load_country_from_server_failed">Load countries from server failed!</string>
+    <string name="load_weather_from_server_failed">Load weather from server failed!</string>
+    <string name="china">China</string>
+    <string name="report">Report</string>
+    <string name="gas_aqi">Gas AQI</string>
+    <string name="aqi_sqart">AQI Sqart</string>
+    <string name="pm25_sqart">PM2.5 Sqart</string>
+    <string name="life_suggestion">Life Suggestion</string>
 </resources>

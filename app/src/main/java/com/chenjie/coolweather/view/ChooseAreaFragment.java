@@ -1,6 +1,7 @@
 package com.chenjie.coolweather.view;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chenjie.coolweather.R;
+import com.chenjie.coolweather.WeatherActivity;
 import com.chenjie.coolweather.dao.City;
 import com.chenjie.coolweather.dao.Country;
 import com.chenjie.coolweather.dao.Province;
@@ -64,8 +66,8 @@ public class ChooseAreaFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.choose_area, container, false);
-        titleText = (TextView)view.findViewById(R.id.title_text);
-        backButton = (Button)view.findViewById(R.id.back_button);
+        titleText = (TextView) view.findViewById(R.id.title_text);
+        backButton = (Button) view.findViewById(R.id.back_button);
         listView = (ListView) view.findViewById(R.id.list_view);
 
 
@@ -90,7 +92,12 @@ public class ChooseAreaFragment extends Fragment {
                     selectedCity = cityList.get(i);
                     queryCountries();
                 } else if (currentLevel == LEVEL_COUNTRY) {
-                    //TODO:进入天气界面
+                    selectedCountry = countryList.get(i);
+                    String weatherID = selectedCountry.getWeatherID();
+                    Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                    intent.putExtra("weather_id", weatherID);
+                    startActivity(intent);
+                    getActivity().finish();
                 }
             }
         });
@@ -114,6 +121,7 @@ public class ChooseAreaFragment extends Fragment {
     }
 
     private void queryProvinces() {
+        titleText.setText(R.string.china);
         backButton.setVisibility(View.GONE);
         boolean successedFromDB = queryProvincesFromDB();
         if (!successedFromDB) {
@@ -125,7 +133,7 @@ public class ChooseAreaFragment extends Fragment {
         provinceList = DataSupport.findAll(Province.class);
         if (provinceList.size() > 0) {
             dataList.clear();
-            for (Province province : provinceList ) {
+            for (Province province : provinceList) {
                 dataList.add(province.getName());
             }
             adapter.notifyDataSetChanged();
@@ -142,11 +150,12 @@ public class ChooseAreaFragment extends Fragment {
         NetworkUtil.sendHttpRequest(address, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         progressDialog.dismiss();
-                        Toast.makeText(getContext(), R.string.load_provinces_from_server_failed, Toast.LENGTH_SHORT);
+                        Toast.makeText(getContext(), R.string.load_provinces_from_server_failed, Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -169,6 +178,7 @@ public class ChooseAreaFragment extends Fragment {
     }
 
     private void queryCities() {
+        titleText.setText(selectedProvince.getName());
         backButton.setVisibility(View.VISIBLE);
         boolean succesedFromDB = queryCitiesFromDB();
         if (!succesedFromDB) {
@@ -180,7 +190,7 @@ public class ChooseAreaFragment extends Fragment {
         cityList = DataSupport.where("provinceid = ?", String.valueOf(selectedProvince.getId())).find(City.class);
         if (cityList.size() > 0) {
             dataList.clear();
-            for (City city : cityList ) {
+            for (City city : cityList) {
                 dataList.add(city.getName());
             }
             adapter.notifyDataSetChanged();
@@ -197,11 +207,12 @@ public class ChooseAreaFragment extends Fragment {
         NetworkUtil.sendHttpRequest(address, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         progressDialog.dismiss();
-                        Toast.makeText(getContext(), R.string.load_cities_from_server_failed, Toast.LENGTH_SHORT);
+                        Toast.makeText(getContext(), R.string.load_cities_from_server_failed, Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -224,6 +235,7 @@ public class ChooseAreaFragment extends Fragment {
     }
 
     private void queryCountries() {
+        titleText.setText(selectedCity.getName());
         backButton.setVisibility(View.VISIBLE);
         boolean succesedFromDB = queryCountriesFromDB();
         if (!succesedFromDB) {
@@ -235,7 +247,7 @@ public class ChooseAreaFragment extends Fragment {
         countryList = DataSupport.where("cityid = ?", String.valueOf(selectedCity.getId())).find(Country.class);
         if (countryList.size() > 0) {
             dataList.clear();
-            for (Country country : countryList ) {
+            for (Country country : countryList) {
                 dataList.add(country.getName());
             }
             adapter.notifyDataSetChanged();
@@ -252,11 +264,12 @@ public class ChooseAreaFragment extends Fragment {
         NetworkUtil.sendHttpRequest(address, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         progressDialog.dismiss();
-                        Toast.makeText(getContext(), R.string.load_country_from_server_failed, Toast.LENGTH_SHORT);
+                        Toast.makeText(getContext(), R.string.load_country_from_server_failed, Toast.LENGTH_SHORT).show();
                     }
                 });
             }
