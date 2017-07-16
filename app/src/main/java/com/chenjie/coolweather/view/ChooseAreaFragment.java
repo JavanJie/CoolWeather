@@ -15,9 +15,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.chenjie.coolweather.MainActivity;
 import com.chenjie.coolweather.R;
-import com.chenjie.coolweather.WeatherActivity;
+import com.chenjie.coolweather.activity.MainActivity;
+import com.chenjie.coolweather.activity.WeatherActivity;
 import com.chenjie.coolweather.dao.City;
 import com.chenjie.coolweather.dao.Country;
 import com.chenjie.coolweather.dao.Province;
@@ -33,6 +33,8 @@ import java.util.List;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+
+;
 
 /**
  * Created by chenjie on 2017/7/15.

@@ -1,5 +1,6 @@
-package com.chenjie.coolweather;
+package com.chenjie.coolweather.activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -20,7 +21,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.chenjie.coolweather.R;
 import com.chenjie.coolweather.model.Weather;
+import com.chenjie.coolweather.service.AutoUpdateWeatherDataService;
 import com.chenjie.coolweather.utils.JSONUtil;
 import com.chenjie.coolweather.utils.NetworkUtil;
 
@@ -164,6 +167,10 @@ public class WeatherActivity extends AppCompatActivity {
         sportText.setText(sport);
 
         weatherLayout.setVisibility(View.VISIBLE);
+
+        //启动后台服务更新天气数据
+        Intent intent = new Intent(this, AutoUpdateWeatherDataService.class);
+        startService(intent);
     }
 
     public void requestWeather(String weatherID) {

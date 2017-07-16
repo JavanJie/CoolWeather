@@ -1,10 +1,12 @@
-package com.chenjie.coolweather;
+package com.chenjie.coolweather.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+
+import com.chenjie.coolweather.R;
 
 public class MainActivity extends AppCompatActivity {
 
