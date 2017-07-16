@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">CoolWeather</string>
+    <string name="load_provinces_from_server_failed">Load provinces from server failed!</string>
+    <string name="load_cities_from_server_failed">Load cities from server failed!</string>
+    <string name="load_country_from_server_failed">Load countries from server failed!</string>
 </resources>

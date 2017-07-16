@@ -17,7 +17,7 @@ public class CoolWeatherApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        sharedApplicationContext = getApplicationContext();
+        sharedApplicationContext = getApplicationContext(); //和this是同一对象
         sharedApplication = this;
         LitePalApplication.initialize(this);
     }
