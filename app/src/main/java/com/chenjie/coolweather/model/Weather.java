@@ -18,6 +18,7 @@ public class Weather {
      * suggestion : {"comf":{"brf":"较舒适","txt":"白天天气晴好，您在这种天气条件下，会感觉早晚凉爽、舒适，午后偏热。"},"cw":{"brf":"较不宜","txt":"较不宜洗车，未来一天无雨，风力较大，如果执意擦洗汽车，要做好蒙上污垢的心理准备。"},"drsg":{"brf":"炎热","txt":"天气炎热，建议着短衫、短裙、短裤、薄型T恤衫等清凉夏季服装。"},"flu":{"brf":"少发","txt":"各项气象条件适宜，发生感冒机率较低。但请避免长期处于空调房间中，以防感冒。"},"sport":{"brf":"较适宜","txt":"天气较好，但因气温较高且风力较强，请适当降低运动强度并注意户外防风。"},"trav":{"brf":"适宜","txt":"天气较好，温度稍高，幸好风稍大，会缓解稍热的天气。适宜旅游，可不要错过机会呦！"},"uv":{"brf":"弱","txt":"紫外线强度较弱，建议出门前涂擦SPF在12-15之间、PA+的防晒护肤品。"}}
      */
 
+    private AQI aqi;
     private BasicBean basic;
     private NowBean now;
     private String status;
@@ -73,6 +74,95 @@ public class Weather {
 
     public void setHourlyForecast(List<HourlyForecastBean> hourlyForecast) {
         this.hourlyForecast = hourlyForecast;
+    }
+
+    public static class AQI {
+
+        private City city;
+
+        public static class City {
+
+            private String aqi; //空气质量指数
+            private String co; //一氧化碳
+            private String no2; //二氧化氮
+            private String o3; //臭氧
+            private String pm10; //PM10
+            private String pm25; //PM2.5
+            private String qlty; //质量评级
+            private String so2; //二氧化硫
+
+            public String getAqi() {
+                return aqi;
+            }
+
+            public void setAqi(String aqi) {
+                this.aqi = aqi;
+            }
+
+            public String getCo() {
+                return co;
+            }
+
+            public void setCo(String co) {
+                this.co = co;
+            }
+
+            public String getNo2() {
+                return no2;
+            }
+
+            public void setNo2(String no2) {
+                this.no2 = no2;
+            }
+
+            public String getO3() {
+                return o3;
+            }
+
+            public void setO3(String o3) {
+                this.o3 = o3;
+            }
+
+            public String getPm10() {
+                return pm10;
+            }
+
+            public void setPm10(String pm10) {
+                this.pm10 = pm10;
+            }
+
+            public String getPm25() {
+                return pm25;
+            }
+
+            public void setPm25(String pm25) {
+                this.pm25 = pm25;
+            }
+
+            public String getQlty() {
+                return qlty;
+            }
+
+            public void setQlty(String qlty) {
+                this.qlty = qlty;
+            }
+
+            public String getSo2() {
+                return so2;
+            }
+
+            public void setSo2(String so2) {
+                this.so2 = so2;
+            }
+        }
+
+        public City getCity() {
+            return city;
+        }
+
+        public void setCity(City city) {
+            this.city = city;
+        }
     }
 
     public static class BasicBean {
@@ -896,7 +986,8 @@ public class Weather {
         private String hum;
         private String pop;
         private String pres;
-        private String tmp;
+        @SerializedName("tmp")
+        private String temperature;
         private WindBeanXX wind;
 
         public CondBeanXX getCond() {
@@ -939,12 +1030,12 @@ public class Weather {
             this.pres = pres;
         }
 
-        public String getTmp() {
-            return tmp;
+        public String getTemperature() {
+            return temperature;
         }
 
-        public void setTmp(String tmp) {
-            this.tmp = tmp;
+        public void setTemperature(String temperature) {
+            this.temperature = temperature;
         }
 
         public WindBeanXX getWind() {
@@ -962,7 +1053,8 @@ public class Weather {
              */
 
             private String code;
-            private String txt;
+            @SerializedName("txt")
+            private String info;
 
             public String getCode() {
                 return code;
@@ -972,12 +1064,12 @@ public class Weather {
                 this.code = code;
             }
 
-            public String getTxt() {
-                return txt;
+            public String getInfo() {
+                return info;
             }
 
-            public void setTxt(String txt) {
-                this.txt = txt;
+            public void setInfo(String info) {
+                this.info = info;
             }
         }
 
@@ -1027,19 +1119,12 @@ public class Weather {
             }
         }
     }
+
+    public AQI getAqi() {
+        return aqi;
+    }
+
+    public void setAqi(AQI aqi) {
+        this.aqi = aqi;
+    }
 }
-//public class Weather {
-//
-//    public String status;
-//
-//    public Basic basic;
-//
-//    public AQI aqi;
-//
-//    public Now now;
-//
-//    public Suggestion suggestion;
-//
-//    @SerializedName("daily_forecase")
-//    public List<Forecast> forecastList;
-//}

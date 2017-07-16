@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">酷欧天气</string>
+    <string name="load_provinces_from_server_failed">从服务器加载省份信息失败！</string>
+    <string name="load_cities_from_server_failed">从服务器加载城市信息失败！</string>
+    <string name="load_country_from_server_failed">从服务器加载区县信息失败！</string>
+    <string name="load_weather_from_server_failed">请求天气信息失败！</string>
+    <string name="china">中国</string>
+    <string name="report">预报</string>
+    <string name="gas_aqi">空气质量</string>
+    <string name="aqi_sqart">空气质量指数</string>
+    <string name="pm25_sqart">PM2.5 指数</string>
+    <string name="life_suggestion">生活建议</string>
+    <string name="the_next_7_days">未来7天</string>
+</resources>

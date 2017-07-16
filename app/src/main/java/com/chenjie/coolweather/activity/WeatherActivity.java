@@ -42,7 +42,8 @@ public class WeatherActivity extends AppCompatActivity {
     private TextView degreeText;
     private TextView weatherInfoText;
 
-    private LinearLayout forecastLayout;
+    private LinearLayout hourForecastLayout;
+    private LinearLayout dailyForecastLayout;
 
     private TextView aqiText;
     private TextView pm25Text;
@@ -74,7 +75,8 @@ public class WeatherActivity extends AppCompatActivity {
         degreeText = (TextView) findViewById(R.id.degree_text);
         weatherInfoText = (TextView) findViewById(R.id.weather_info_text);
 
-        forecastLayout = (LinearLayout) findViewById(R.id.daily_forecast_layout);
+        hourForecastLayout = (LinearLayout) findViewById(R.id.hour_forecast_layout);
+        dailyForecastLayout = (LinearLayout) findViewById(R.id.daily_forecast_layout);
 
         aqiText = (TextView) findViewById(R.id.aqi_text);
         pm25Text = (TextView) findViewById(R.id.pm25_text);
@@ -135,10 +137,27 @@ public class WeatherActivity extends AppCompatActivity {
         titleUpdateTime.setText(updateTime);
         degreeText.setText(degree);
         weatherInfoText.setText(weatherInfo);
-        forecastLayout.removeAllViews();
+
+        hourForecastLayout.removeAllViews();
+        Log.d(TAG, "Hour forecast size = " + weather.getHourlyForecast().size());
+        for (Weather.HourlyForecastBean forecast : weather.getHourlyForecast()) {
+            View view = LayoutInflater.from(this).inflate(R.layout.hour_forecast_item, hourForecastLayout, false);
+
+            TextView dateText = (TextView) view.findViewById(R.id.hour_date_text);
+            TextView infoText = (TextView) view.findViewById(R.id.hour_info_text);
+            TextView temperatureText = (TextView) view.findViewById(R.id.hour_temperature_text);
+
+            dateText.setText(forecast.getDate());
+            infoText.setText(forecast.getCond().getInfo());
+            temperatureText.setText(forecast.getTemperature());
+
+            hourForecastLayout.addView(view);
+        }
+
+        dailyForecastLayout.removeAllViews();
 
         for (Weather.DailyForecast forecast : weather.getDailyForecast()) {
-            View view = LayoutInflater.from(this).inflate(R.layout.daily_forecast_item, forecastLayout, false);
+            View view = LayoutInflater.from(this).inflate(R.layout.daily_forecast_item, dailyForecastLayout, false);
 
             TextView dateText = (TextView) view.findViewById(R.id.daily_date_text);
             TextView infoText = (TextView) view.findViewById(R.id.daily_info_text);
@@ -150,13 +169,13 @@ public class WeatherActivity extends AppCompatActivity {
             maxText.setText(forecast.getTemperature().getMax());
             minText.setText(forecast.getTemperature().getMin());
 
-            forecastLayout.addView(view);
+            dailyForecastLayout.addView(view);
         }
 
-//        if (weather.aqi != null) {
-//            aqiText.setText(weather.aqi.city.aqi);
-//            pm25Text.setText(weather.aqi.city.pm25);
-//        }
+        if (weather.getAqi() != null) {
+            aqiText.setText(weather.getAqi().getCity().getAqi());
+            pm25Text.setText(weather.getAqi().getCity().getPm25());
+        }
 
         String comfort = "舒适度：" + weather.getSuggestion().getComfort().getInfo();
         String carWash = "洗车指数：" + weather.getSuggestion().getCarWash().getInfo();
